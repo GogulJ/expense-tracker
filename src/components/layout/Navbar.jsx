@@ -7,6 +7,7 @@ import {
   FaSignOutAlt,
   FaBars,
   FaTimes,
+  FaArrowUp,
 } from 'react-icons/fa';
 
 export default function Navbar() {
@@ -55,6 +56,10 @@ export default function Navbar() {
             <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
               <Link to="/" className="nav-btn">
                 <FaChartPie /> Dashboard
+              </Link>
+
+              <Link to="/income" className="nav-btn">
+                <FaArrowUp /> Income
               </Link>
 
               <Link to="/expenses" className="nav-btn">

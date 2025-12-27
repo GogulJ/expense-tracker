@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useExpenses } from '../hooks/useExpenses';
+import { useIncome } from '../hooks/useIncome';
 import { format } from 'date-fns';
 import { FaPlus, FaTrash, FaEdit, FaSearch } from 'react-icons/fa';
 
-const CATEGORIES = ['Food', 'Travel','Mobile Recharge', 'Taxies', 'Utilities', 'Movie', 'Xerox','Pharmacy', 'Others'];
+const SOURCES = ['Salary', 'Freelance', 'Bonus', 'Investment', 'Gift', 'Other'];
 
-export default function ExpensesPage() {
-  const { expenses, addExpense, deleteExpense, updateExpense } = useExpenses();
+export default function IncomePage() {
+  const { incomes, addIncome, deleteIncome, updateIncome } = useIncome();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -14,31 +14,31 @@ export default function ExpensesPage() {
   const [formData, setFormData] = useState({
     title: '',
     amount: '',
-    category: 'Food',
+    source: 'Salary',
     date: format(new Date(), 'yyyy-MM-dd'),
   });
 
-  const filteredExpenses = expenses.filter(
-    (e) =>
-      e.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      e.category.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredIncomes = incomes.filter(
+    (i) =>
+      i.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      i.source.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const openModal = (expense = null) => {
-    if (expense) {
-      setEditingId(expense.id);
+  const openModal = (income = null) => {
+    if (income) {
+      setEditingId(income.id);
       setFormData({
-        title: expense.title,
-        amount: expense.amount,
-        category: expense.category,
-        date: format(expense.date, 'yyyy-MM-dd'),
+        title: income.title,
+        amount: income.amount,
+        source: income.source,
+        date: format(income.date, 'yyyy-MM-dd'),
       });
     } else {
       setEditingId(null);
       setFormData({
         title: '',
         amount: '',
-        category: 'Food',
+        source: 'Salary',
         date: format(new Date(), 'yyyy-MM-dd'),
       });
     }
@@ -51,11 +51,11 @@ export default function ExpensesPage() {
     const payload = {
       title: formData.title,
       amount: parseFloat(formData.amount),
-      category: formData.category,
+      source: formData.source,
       date: new Date(formData.date),
     };
 
-    editingId ? await updateExpense(editingId, payload) : await addExpense(payload);
+    editingId ? await updateIncome(editingId, payload) : await addIncome(payload);
     setIsModalOpen(false);
   };
 
@@ -63,10 +63,10 @@ export default function ExpensesPage() {
     <div className="fade-in">
       {/* Header */}
       <header className="expenses-header">
-        <h1>Expenses</h1>
+        <h1>Income</h1>
 
         <button className="btn btn-primary" onClick={() => openModal()}>
-          <FaPlus /> Add Expense
+          <FaPlus /> Add Income
         </button>
       </header>
 
@@ -74,7 +74,7 @@ export default function ExpensesPage() {
       <div className="card search-card">
         <FaSearch />
         <input
-          placeholder="Search by title or category…"
+          placeholder="Search by title or source…"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -87,29 +87,29 @@ export default function ExpensesPage() {
             <tr>
               <th>Date</th>
               <th>Title</th>
-              <th>Category</th>
+              <th>Source</th>
               <th className="amount">Amount</th>
               <th className="actions">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {filteredExpenses.map((e) => (
-              <tr key={e.id}>
-                <td>{format(e.date, 'MMM d, yyyy')}</td>
-                <td className="title">{e.title}</td>
+            {filteredIncomes.map((i) => (
+              <tr key={i.id}>
+                <td>{format(i.date, 'MMM d, yyyy')}</td>
+                <td className="title">{i.title}</td>
                 <td>
-                  <span className={`badge ${e.category.toLowerCase()}`}>
-                    {e.category}
+                  <span className={`badge ${i.source.toLowerCase()}`}>
+                    {i.source}
                   </span>
                 </td>
-                <td className="amount">₹{parseFloat(e.amount).toFixed(2)}</td>
+                <td className="amount">₹{parseFloat(i.amount).toFixed(2)}</td>
                 <td className="actions">
-                  <button onClick={() => openModal(e)} className="icon-btn edit">
+                  <button onClick={() => openModal(i)} className="icon-btn edit">
                     <FaEdit />
                   </button>
                   <button
-                    onClick={() => window.confirm('Delete this expense?') && deleteExpense(e.id)}
+                    onClick={() => window.confirm('Delete this income?') && deleteIncome(i.id)}
                     className="icon-btn delete"
                   >
                     <FaTrash />
@@ -118,10 +118,10 @@ export default function ExpensesPage() {
               </tr>
             ))}
 
-            {filteredExpenses.length === 0 && (
+            {filteredIncomes.length === 0 && (
               <tr>
                 <td colSpan="5" className="empty">
-                  No expenses found
+                  No income records found
                 </td>
               </tr>
             )}
@@ -133,7 +133,7 @@ export default function ExpensesPage() {
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-card">
-            <h2>{editingId ? 'Edit Expense' : 'Add Expense'}</h2>
+            <h2>{editingId ? 'Edit Income' : 'Add Income'}</h2>
 
             <form onSubmit={handleSubmit}>
               <div className="input-group">
@@ -169,13 +169,13 @@ export default function ExpensesPage() {
               </div>
 
               <div className="input-group">
-                <label>Category</label>
+                <label>Source</label>
                 <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  value={formData.source}
+                  onChange={(e) => setFormData({ ...formData, source: e.target.value })}
                 >
-                  {CATEGORIES.map((c) => (
-                    <option key={c}>{c}</option>
+                  {SOURCES.map((s) => (
+                    <option key={s}>{s}</option>
                   ))}
                 </select>
               </div>
@@ -185,7 +185,7 @@ export default function ExpensesPage() {
                   Cancel
                 </button>
                 <button className="btn btn-primary">
-                  {editingId ? 'Update' : 'Add'} Expense
+                  {editingId ? 'Update' : 'Add'} Income
                 </button>
               </div>
             </form>
@@ -246,6 +246,7 @@ export default function ExpensesPage() {
 
         .amount {
           font-weight: 600;
+          color: #16a34a;
         }
 
         .actions {
@@ -274,8 +275,33 @@ export default function ExpensesPage() {
           padding: 4px 10px;
           border-radius: 999px;
           font-size: 0.8rem;
+          background: rgba(34,197,94,0.12);
+          color: #16a34a;
+        }
+
+        .badge.salary {
           background: rgba(99,102,241,0.12);
           color: #4f46e5;
+        }
+
+        .badge.freelance {
+          background: rgba(168,85,247,0.12);
+          color: #a855f7;
+        }
+
+        .badge.bonus {
+          background: rgba(245,158,11,0.12);
+          color: #f59e0b;
+        }
+
+        .badge.investment {
+          background: rgba(6,182,212,0.12);
+          color: #06b6d4;
+        }
+
+        .badge.gift {
+          background: rgba(236,72,153,0.12);
+          color: #ec4899;
         }
 
         .empty {
@@ -346,8 +372,8 @@ export default function ExpensesPage() {
         .input-group input:focus,
         .input-group select:focus {
           outline: none;
-          border-color: #4f46e5;
-          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+          border-color: #16a34a;
+          box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
           background: white;
         }
 
@@ -387,14 +413,14 @@ export default function ExpensesPage() {
         }
 
         .btn-primary {
-          background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+          background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
           color: white;
-          box-shadow: 0 4px 15px -3px rgba(79, 70, 229, 0.4);
+          box-shadow: 0 4px 15px -3px rgba(22, 163, 74, 0.4);
         }
 
         .btn-primary:hover {
           transform: translateY(-2px);
-          box-shadow: 0 6px 20px -3px rgba(79, 70, 229, 0.5);
+          box-shadow: 0 6px 20px -3px rgba(22, 163, 74, 0.5);
         }
 
         .btn-primary:active {

@@ -14,8 +14,8 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { db, auth } from "../services/firebase";
 
-export function useExpenses() {
-  const [expenses, setExpenses] = useState([]);
+export function useIncome() {
+  const [incomes, setIncomes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,13 +23,13 @@ export function useExpenses() {
 
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        setExpenses([]);
+        setIncomes([]);
         setLoading(false);
         return;
       }
 
       const q = query(
-        collection(db, "expenses"),
+        collection(db, "incomes"),
         where("uid", "==", user.uid)
       );
 
@@ -47,7 +47,7 @@ export function useExpenses() {
             return dateB - dateA;
           });
 
-          setExpenses(data);
+          setIncomes(data);
           setLoading(false);
         },
         (error) => {
@@ -62,31 +62,31 @@ export function useExpenses() {
     };
   }, []);
 
-  // ✅ Add Expense
-  const addExpense = async (expense) => {
+  // ✅ Add Income
+  const addIncome = async (income) => {
     if (!auth.currentUser) return;
 
-    await addDoc(collection(db, "expenses"), {
-      ...expense,
+    await addDoc(collection(db, "incomes"), {
+      ...income,
       uid: auth.currentUser.uid,
-      date: expense.date ? new Date(expense.date) : serverTimestamp(),
+      date: income.date ? new Date(income.date) : serverTimestamp(),
     });
   };
 
-  // ✅ Delete Expense
-  const deleteExpense = async (id) => {
-    await deleteDoc(doc(db, "expenses", id));
+  // ✅ Delete Income
+  const deleteIncome = async (id) => {
+    await deleteDoc(doc(db, "incomes", id));
   };
 
-  // ✅ Update Expense
-  const updateExpense = async (id, updatedExpense) => {
-    await updateDoc(doc(db, "expenses", id), {
-      ...updatedExpense,
-      date: updatedExpense.date
-        ? new Date(updatedExpense.date)
+  // ✅ Update Income
+  const updateIncome = async (id, updatedIncome) => {
+    await updateDoc(doc(db, "incomes", id), {
+      ...updatedIncome,
+      date: updatedIncome.date
+        ? new Date(updatedIncome.date)
         : serverTimestamp(),
     });
   };
 
-  return { expenses, loading, addExpense, deleteExpense, updateExpense };
+  return { incomes, loading, addIncome, deleteIncome, updateIncome };
 }

@@ -5,6 +5,7 @@ import Layout from './components/layout/Layout';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import ExpensesPage from './pages/ExpensesPage';
+import IncomePage from './pages/IncomePage';
 import './index.css';
 
 function PrivateRoute({ children }) {
@@ -47,6 +48,17 @@ function App() {
             <PrivateRoute>
               <Layout>
                 <ExpensesPage />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/income"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <IncomePage />
               </Layout>
             </PrivateRoute>
           }
