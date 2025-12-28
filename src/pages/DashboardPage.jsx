@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import { useExpenses } from '../hooks/useExpenses';
-import { useIncome } from '../hooks/useIncome';
+import { useTransactions } from '../context/TransactionContext';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -22,6 +21,7 @@ import {
   subWeeks,
 } from 'date-fns';
 import { FaArrowUp, FaArrowDown, FaWallet, FaPiggyBank } from 'react-icons/fa';
+import './DashboardPage.css';
 
 ChartJS.register(
   ArcElement,
@@ -34,8 +34,7 @@ ChartJS.register(
 );
 
 export default function DashboardPage() {
-  const { expenses, loading } = useExpenses();
-  const { incomes } = useIncome();
+  const { expenses, incomes, loading } = useTransactions();
 
   /* =========================
      📊 CORE STATS
@@ -164,7 +163,6 @@ export default function DashboardPage() {
     });
 
     const now = new Date();
-    const weekStart = startOfWeek(now);
 
     expenses.forEach((e) => {
       if (isSameWeek(e.date, now)) {
@@ -295,7 +293,7 @@ export default function DashboardPage() {
           <div>
             <p>Total Income</p>
             <h2>₹{stats.totalIncome.toLocaleString()}</h2>
-            <span>Lifetime</span>
+            <span className="meta">Lifetime</span>
           </div>
         </div>
 
@@ -304,7 +302,7 @@ export default function DashboardPage() {
           <div>
             <p>Purse Amount</p>
             <h2>₹{stats.purseAmount.toLocaleString()}</h2>
-            <span>{savingsPercent}% of income</span>
+            <span className="meta">{savingsPercent}% of income</span>
           </div>
         </div>
 
@@ -313,7 +311,7 @@ export default function DashboardPage() {
             <p>This Month Income</p>
             <h2>₹{stats.thisMonthIncome.toLocaleString()}</h2>
           </div>
-          <span className="muted">Monthly earnings</span>
+          <span className="meta">Monthly earnings</span>
         </div>
 
         <div className="stat-card">
@@ -331,7 +329,7 @@ export default function DashboardPage() {
             <p>This Week Income</p>
             <h2>₹{stats.thisWeekIncome.toLocaleString()}</h2>
           </div>
-          <span className="muted">Weekly earnings</span>
+          <span className="meta">Weekly earnings</span>
         </div>
 
         <div className="stat-card">
@@ -349,7 +347,7 @@ export default function DashboardPage() {
             <p>Avg / Day</p>
             <h2>₹{avgDailySpend.toFixed(0)}</h2>
           </div>
-          <span className="muted">Spending habit</span>
+          <span className="meta">Spending habit</span>
         </div>
 
         <div className="stat-card highlight">
@@ -357,7 +355,7 @@ export default function DashboardPage() {
             <p>Predicted Next Month</p>
             <h2>₹{predictedNextMonth.toFixed(0)}</h2>
           </div>
-          <span>Forecast</span>
+          <span className="meta">Forecast</span>
         </div>
       </section>
 
@@ -390,174 +388,20 @@ export default function DashboardPage() {
 
         <div className="chart-card">
           <h3>Top Category Growth</h3>
-          {categoryGrowth.slice(0, 3).map((c) => (
-            <div key={c.category} className="growth-row">
-              <span>{c.category}</span>
-              <span className={c.change >= 0 ? 'up' : 'down'}>
-                {c.change >= 0 ? '+' : '-'}₹{Math.abs(c.change).toFixed(0)}
-              </span>
-            </div>
-          ))}
+          {categoryGrowth.length > 0 ? (
+             categoryGrowth.slice(0, 3).map((c) => (
+              <div key={c.category} className="growth-row">
+                <span>{c.category}</span>
+                <span className={c.change >= 0 ? 'up' : 'down'}>
+                  {c.change >= 0 ? '+' : '-'}₹{Math.abs(c.change).toFixed(0)}
+                </span>
+              </div>
+            ))
+          ) : (
+             <p className="empty">No data available</p>
+          )}
         </div>
       </section>
-
-      {/* Styles */}
-      <style>{`
-        .dashboard-header {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 1.5rem;
-        }
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 1.2rem;
-          margin-bottom: 2rem;
-        }
-        .stat-card {
-          padding: 1.4rem;
-          border-radius: 16px;
-          background: white;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          position: relative;
-          overflow: hidden;
-          border: 1px solid #e5e7eb;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
-        .stat-card:hover {
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-          border-color: #d1d5db;
-        }
-        .stat-card::before {
-          content: '';
-          position: absolute;
-          top: -50%;
-          right: -50%;
-          width: 200px;
-          height: 200px;
-          background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
-          border-radius: 50%;
-          pointer-events: none;
-        }
-        .stat-card p {
-          font-size: 0.85rem;
-          color: #6b7280;
-          margin: 0;
-          font-weight: 500;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        .stat-card h2 {
-          font-size: 1.6rem;
-          margin: 0.3rem 0 0 0;
-          color: #1f2937;
-          font-weight: 700;
-        }
-        .stat-card span {
-          font-size: 0.75rem;
-          color: #9ca3af;
-          font-weight: 500;
-        }
-        .stat-card.highlight {
-          background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-          color: white;
-          border: none;
-          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-        .stat-card.highlight:hover {
-          box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
-          transform: translateY(-2px);
-        }
-        .stat-card.highlight.purse {
-          background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-          box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
-        }
-        .stat-card.highlight.purse:hover {
-          box-shadow: 0 8px 20px rgba(22, 163, 74, 0.4);
-        }
-        .stat-card.highlight p {
-          color: rgba(255, 255, 255, 0.85);
-        }
-        .stat-card.highlight h2 {
-          color: white;
-        }
-        .stat-card.highlight span {
-          color: rgba(255, 255, 255, 0.7);
-        }
-        .stat-card svg {
-          font-size: 1.5rem;
-          margin-right: 0.8rem;
-          color: #6366f1;
-          opacity: 0.8;
-        }
-        .stat-card.highlight svg {
-          color: rgba(255, 255, 255, 0.95);
-        }
-        .trend {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.3rem;
-          padding: 0.3rem 0.6rem;
-          border-radius: 6px;
-          font-size: 0.7rem;
-          font-weight: 600;
-          margin-top: 0.4rem;
-          width: fit-content;
-        }
-        .trend.up {
-          background: rgba(34, 197, 94, 0.1);
-          color: #16a34a;
-        }
-        .trend.down {
-          background: rgba(220, 38, 38, 0.1);
-          color: #dc2626;
-        }
-        .muted {
-          color: #9ca3af !important;
-          font-size: 0.75rem !important;
-        }
-        .charts-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 1.5rem;
-        }
-        .chart-card {
-          background: white;
-          border-radius: 16px;
-          padding: 1.5rem;
-        }
-        .chart-box {
-          height: 280px;
-        }
-        .growth-row {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 0.6rem;
-        }
-        .up { color: #16a34a; }
-        .down { color: #dc2626; }
-        .alert-card {
-          background: #fff7ed;
-          border-left: 5px solid #f97316;
-          padding: 1rem;
-          margin-bottom: 1.2rem;
-          border-radius: 12px;
-        }
-        .alert-card.alert-warning {
-          background: #fef3c7;
-          border-left: 5px solid #eab308;
-        }
-        .fade-in {
-          animation: fade 0.4s ease-in;
-        }
-        @keyframes fade {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 }

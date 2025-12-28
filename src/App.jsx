@@ -1,6 +1,8 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
+import { TransactionProvider } from './context/TransactionContext';
 import Layout from './components/layout/Layout';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -21,49 +23,53 @@ function PublicRoute({ children }) {
 function App() {
   return (
     <AuthProvider>
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <LoginPage />
-            </PublicRoute>
-          }
-        />
+      <ThemeProvider>
+        <TransactionProvider>
+          <Routes>
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <LoginPage />
+                </PublicRoute>
+              }
+            />
 
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Layout>
-                <DashboardPage />
-              </Layout>
-            </PrivateRoute>
-          }
-        />
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <DashboardPage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          path="/expenses"
-          element={
-            <PrivateRoute>
-              <Layout>
-                <ExpensesPage />
-              </Layout>
-            </PrivateRoute>
-          }
-        />
+            <Route
+              path="/expenses"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <ExpensesPage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
 
-        <Route
-          path="/income"
-          element={
-            <PrivateRoute>
-              <Layout>
-                <IncomePage />
-              </Layout>
-            </PrivateRoute>
-          }
-        />
-      </Routes>
+            <Route
+              path="/income"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <IncomePage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </TransactionProvider>
+      </ThemeProvider>
     </AuthProvider>
   );
 }
