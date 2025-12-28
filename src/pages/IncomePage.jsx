@@ -61,7 +61,6 @@ export default function IncomePage() {
 
   return (
     <div className="fade-in">
-      {/* Header */}
       <header className="expenses-header">
         <h1>Income</h1>
 
@@ -70,7 +69,6 @@ export default function IncomePage() {
         </button>
       </header>
 
-      {/* Search */}
       <div className="card search-card">
         <FaSearch />
         <input
