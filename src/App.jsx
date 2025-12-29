@@ -3,11 +3,23 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { TransactionProvider } from './context/TransactionContext';
-import Layout from './components/layout/Layout';
+import { HabitProvider } from './context/HabitContext';
+import { EventProvider } from './context/EventContext';
+import { AppModeProvider } from './context/AppModeContext';
+
+// Layouts
+import FinanceLayout from './components/layout/FinanceLayout';
+import HabitLayout from './components/layout/HabitLayout';
+
+// Pages
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import ExpensesPage from './pages/ExpensesPage';
 import IncomePage from './pages/IncomePage';
+import HabitsPage from './pages/HabitsPage';
+import HabitAnalyticsPage from './pages/HabitAnalyticsPage';
+import HabitCalendarPage from './pages/HabitCalendarPage';
+
 import './index.css';
 
 function PrivateRoute({ children }) {
@@ -24,51 +36,93 @@ function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <TransactionProvider>
-          <Routes>
-            <Route
-              path="/login"
-              element={
-                <PublicRoute>
-                  <LoginPage />
-                </PublicRoute>
-              }
-            />
+        <AppModeProvider>
+          <TransactionProvider>
+            <EventProvider>
+              <HabitProvider>
+                <Routes>
+                {/* Public Route */}
+                <Route
+                  path="/login"
+                  element={
+                    <PublicRoute>
+                      <LoginPage />
+                    </PublicRoute>
+                  }
+                />
 
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <DashboardPage />
-                  </Layout>
-                </PrivateRoute>
-              }
-            />
+                {/* ========== FINANCE APP ROUTES ========== */}
+                <Route
+                  path="/"
+                  element={
+                    <PrivateRoute>
+                      <FinanceLayout>
+                        <DashboardPage />
+                      </FinanceLayout>
+                    </PrivateRoute>
+                  }
+                />
 
-            <Route
-              path="/expenses"
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <ExpensesPage />
-                  </Layout>
-                </PrivateRoute>
-              }
-            />
+                <Route
+                  path="/expenses"
+                  element={
+                    <PrivateRoute>
+                      <FinanceLayout>
+                        <ExpensesPage />
+                      </FinanceLayout>
+                    </PrivateRoute>
+                  }
+                />
 
-            <Route
-              path="/income"
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <IncomePage />
-                  </Layout>
-                </PrivateRoute>
-              }
-            />
-          </Routes>
+                <Route
+                  path="/income"
+                  element={
+                    <PrivateRoute>
+                      <FinanceLayout>
+                        <IncomePage />
+                      </FinanceLayout>
+                    </PrivateRoute>
+                  }
+                />
+
+                {/* ========== HABITS APP ROUTES ========== */}
+                <Route
+                  path="/habits"
+                  element={
+                    <PrivateRoute>
+                      <HabitLayout>
+                        <HabitsPage />
+                      </HabitLayout>
+                    </PrivateRoute>
+                  }
+                />
+
+                <Route
+                  path="/habits/analytics"
+                  element={
+                    <PrivateRoute>
+                      <HabitLayout>
+                        <HabitAnalyticsPage />
+                      </HabitLayout>
+                    </PrivateRoute>
+                  }
+                />
+
+                <Route
+                  path="/habits/calendar"
+                  element={
+                    <PrivateRoute>
+                      <HabitLayout>
+                        <HabitCalendarPage />
+                      </HabitLayout>
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+            </HabitProvider>
+          </EventProvider>
         </TransactionProvider>
+        </AppModeProvider>
       </ThemeProvider>
     </AuthProvider>
   );

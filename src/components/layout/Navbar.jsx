@@ -11,6 +11,7 @@ import {
   FaArrowUp,
   FaMoon,
   FaSun,
+  FaTasks,
 } from 'react-icons/fa';
 import './Navbar.css';
 
@@ -60,6 +61,10 @@ export default function Navbar() {
 
               <Link to="/income" className="nav-btn" onClick={() => setIsMenuOpen(false)}>
                 <FaArrowUp /> Income
+              </Link>
+
+              <Link to="/habits" className="nav-btn" onClick={() => setIsMenuOpen(false)}>
+                <FaTasks /> Habits
               </Link>
 
               <button onClick={toggleTheme} className="nav-btn theme-toggle-btn" title="Toggle Theme">

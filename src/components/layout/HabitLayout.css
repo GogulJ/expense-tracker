@@ -1,0 +1,140 @@
+.habit-navbar {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    padding: 0.75rem 0;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.habit-navbar .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.habit-navbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.habit-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.habit-brand svg {
+    font-size: 1.5rem;
+}
+
+.habit-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.habit-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.habit-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.habit-nav-btn.logout {
+    background: rgba(239, 68, 68, 0.2);
+    color: #FCA5A5;
+}
+
+.habit-nav-btn.logout:hover {
+    background: rgba(239, 68, 68, 0.4);
+    color: white;
+}
+
+/* Habit Layout */
+.habit-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+}
+
+.habit-main {
+    flex: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    padding-right: 100px;
+    /* Space for app switcher */
+}
+
+.habit-footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Mobile Menu */
+.habit-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .habit-menu-toggle {
+        display: block;
+    }
+
+    .habit-nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #059669;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 0.5rem;
+        display: none;
+    }
+
+    .habit-nav-links.open {
+        display: flex;
+    }
+
+    .habit-nav-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .habit-main {
+        padding-right: 1.5rem;
+        padding-bottom: 100px;
+        /* Space for bottom app switcher */
+    }
+}

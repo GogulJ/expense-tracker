@@ -1,0 +1,149 @@
+.habits-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.habits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.habit-card {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s;
+}
+
+.habit-card:hover {
+    transform: translateY(-2px);
+}
+
+.habit-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.habit-info h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+}
+
+.habit-info .badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+.habit-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.fire-icon {
+    color: #EF4444;
+}
+
+.reminder-chip {
+    color: #3B82F6;
+    font-size: 0.75rem;
+}
+
+.reminder-chip svg {
+    font-size: 0.7rem;
+}
+
+.check-btn {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    border: 2px solid var(--border-color);
+    background: transparent;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.check-btn.completed {
+    background: #22C55E;
+    border-color: #22C55E;
+    color: white;
+}
+
+.check-btn:hover:not(.completed) {
+    border-color: #22C55E;
+    color: #22C55E;
+}
+
+/* Calendar Grid for last 14 days */
+.mini-calendar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.day-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+}
+
+.day-dot.done {
+    background: #22C55E;
+    color: white;
+}
+
+.day-dot.missed {
+    background: var(--bg-secondary);
+    opacity: 0.5;
+}
+
+/* Charts Section */
+.habit-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Empty State */
+.no-habits {
+    text-align: center;
+    padding: 3rem;
+    background: var(--card-bg);
+    border-radius: 1rem;
+    color: var(--text-secondary);
+}

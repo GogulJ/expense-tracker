@@ -1,0 +1,86 @@
+.app-switcher {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--card-bg);
+  border-radius: 1rem 0 0 1rem;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  border-right: none;
+}
+
+.app-switcher-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 2px solid transparent;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.7rem;
+  font-weight: 600;
+  min-width: 60px;
+}
+
+.app-switcher-btn svg {
+  font-size: 1.25rem;
+}
+
+.app-switcher-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  transform: translateX(-4px);
+}
+
+.app-switcher-btn.active {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.app-switcher-btn.active.finance {
+  background: linear-gradient(135deg, #6366F1, #4F46E5);
+}
+
+.app-switcher-btn.active.habits {
+  background: linear-gradient(135deg, #10B981, #059669);
+}
+
+/* Mobile: Bottom bar */
+@media (max-width: 768px) {
+  .app-switcher {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    border-radius: 1rem 1rem 0 0;
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    padding: 0.5rem 1rem;
+  }
+
+  .app-switcher-btn {
+    flex: 1;
+    max-width: 120px;
+  }
+
+  .app-switcher-btn:hover {
+    transform: translateY(-2px);
+  }
+}
