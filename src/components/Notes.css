@@ -1,6 +1,6 @@
 .notes-container {
     position: fixed;
-    bottom: 20px;
+    top: 80px;
     right: 20px;
     width: 350px;
     max-width: calc(100vw - 40px);
@@ -160,7 +160,7 @@
 @media (max-width: 768px) {
     .notes-container {
         right: 10px;
-        bottom: 10px;
+        top: 70px;
         width: calc(100vw - 20px);
     }
 
