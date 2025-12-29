@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { FaPlus, FaTrash, FaEdit, FaSearch } from 'react-icons/fa';
 import './IncomePage.css';
 
-const SOURCES = ['Salary', 'Freelance', 'Bonus', 'Investment', 'Gift', 'Other'];
+const SOURCES = ['Salary','Dad','Investment','Other'];
 
 export default function IncomePage() {
   const { incomes, addIncome, deleteIncome, updateIncome } = useTransactions();

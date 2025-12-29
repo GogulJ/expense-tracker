@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { FaPlus, FaTrash, FaEdit, FaSearch } from 'react-icons/fa';
 import './ExpensesPage.css';
 
-const CATEGORIES = ['Food', 'Travel','Mobile Recharge', 'Taxies', 'Utilities', 'Movie', 'Xerox','Pharmacy', 'Others'];
+const CATEGORIES = ['Food','Travel','Mobile Recharge','Taxi','Utilities','Movie','Xerox','Pharmacy','Others'];
 
 export default function ExpensesPage() {
   const { expenses, addExpense, deleteExpense, updateExpense } = useTransactions();

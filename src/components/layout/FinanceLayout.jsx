@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import AppSwitcher from '../AppSwitcher';
+import Notes from '../Notes';
 import {
   FaWallet,
   FaChartPie,
@@ -87,6 +88,9 @@ export default function FinanceLayout({ children }) {
       <footer className="finance-footer">
         © {new Date().getFullYear()} <strong>Expensify</strong> — Track your money smartly 💸
       </footer>
+
+      {/* Notes Section */}
+      <Notes type="finance" />
 
       {/* App Switcher */}
       <AppSwitcher />

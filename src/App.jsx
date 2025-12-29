@@ -6,6 +6,7 @@ import { TransactionProvider } from './context/TransactionContext';
 import { HabitProvider } from './context/HabitContext';
 import { EventProvider } from './context/EventContext';
 import { AppModeProvider } from './context/AppModeContext';
+import { NotesProvider } from './context/NotesContext';
 
 // Layouts
 import FinanceLayout from './components/layout/FinanceLayout';
@@ -37,10 +38,11 @@ function App() {
     <AuthProvider>
       <ThemeProvider>
         <AppModeProvider>
-          <TransactionProvider>
-            <EventProvider>
-              <HabitProvider>
-                <Routes>
+          <NotesProvider>
+            <TransactionProvider>
+              <EventProvider>
+                <HabitProvider>
+                  <Routes>
                 {/* Public Route */}
                 <Route
                   path="/login"
@@ -122,6 +124,7 @@ function App() {
             </HabitProvider>
           </EventProvider>
         </TransactionProvider>
+          </NotesProvider>
         </AppModeProvider>
       </ThemeProvider>
     </AuthProvider>

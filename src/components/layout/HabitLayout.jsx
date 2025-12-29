@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import AppSwitcher from '../AppSwitcher';
+import Notes from '../Notes';
 import {
   FaTasks,
   FaChartLine,
@@ -89,6 +90,9 @@ export default function HabitLayout({ children }) {
       <footer className="habit-footer">
         © {new Date().getFullYear()} <strong>HabitFlow</strong> — Build better habits daily 🌱
       </footer>
+
+      {/* Notes Section */}
+      <Notes type="habits" />
 
       {/* App Switcher */}
       <AppSwitcher />
