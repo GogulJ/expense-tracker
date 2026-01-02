@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { FaPlus, FaTrash, FaEdit, FaSearch } from 'react-icons/fa';
 import './ExpensesPage.css';
 
-const CATEGORIES = ['Food','Travel','Mobile Recharge','Taxi','Utilities','Movie','Xerox','Pharmacy','Others'];
+const CATEGORIES = ['Food','Travel','Mobile Recharge','Taxi','Utilities','Movie','Xerox','Pharmacy','Home','Others'];
 
 export default function ExpensesPage() {
   const { expenses, addExpense, deleteExpense, updateExpense } = useTransactions();
@@ -154,7 +154,7 @@ export default function ExpensesPage() {
                   <label className="input-label">Amount</label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="5"
                     required
                     className="input-control"
                     value={formData.amount}

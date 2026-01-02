@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { FaPlus, FaTrash, FaEdit, FaSearch } from 'react-icons/fa';
 import './IncomePage.css';
 
-const SOURCES = ['Salary','Dad','Investment','Other'];
+const SOURCES = ['Salary','Dad','Investment','Balance Add-on','Other'];
 
 export default function IncomePage() {
   const { incomes, addIncome, deleteIncome, updateIncome } = useTransactions();
@@ -152,7 +152,7 @@ export default function IncomePage() {
                   <label className="input-label">Amount</label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="5"
                     required
                     className="input-control"
                     value={formData.amount}
