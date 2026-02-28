@@ -4,18 +4,18 @@ import { format } from 'date-fns';
 import { FaPlus, FaTrash, FaEdit, FaSearch } from 'react-icons/fa';
 import './IncomePage.css';
 
-const SOURCES = ['Salary','Dad','Investment','Balance Add-on','Other'];
-
 export default function IncomePage() {
-  const { incomes, addIncome, deleteIncome, updateIncome } = useTransactions();
+  const { incomes, addIncome, deleteIncome, updateIncome, sources, addSource } = useTransactions();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isAddingSource, setIsAddingSource] = useState(false);
+  const [newSource, setNewSource] = useState('');
   const [formData, setFormData] = useState({
     title: '',
     amount: '',
-    source: 'Salary',
+    source: sources[0] || 'Salary',
     date: format(new Date(), 'yyyy-MM-dd'),
   });
 
@@ -39,11 +39,22 @@ export default function IncomePage() {
       setFormData({
         title: '',
         amount: '',
-        source: 'Salary',
+        source: sources[0] || 'Salary',
         date: format(new Date(), 'yyyy-MM-dd'),
       });
     }
+    setIsAddingSource(false);
+    setNewSource('');
     setIsModalOpen(true);
+  };
+
+  const handleAddSource = async () => {
+    if (newSource.trim()) {
+      await addSource(newSource);
+      setFormData({ ...formData, source: newSource.trim() });
+      setNewSource('');
+      setIsAddingSource(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -180,15 +191,58 @@ export default function IncomePage() {
 
               <div className="input-group">
                 <label className="input-label">Source</label>
-                <select
-                  className="input-control"
-                  value={formData.source}
-                  onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-                >
-                  {SOURCES.map((s) => (
-                    <option key={s}>{s}</option>
-                  ))}
-                </select>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <select
+                    className="input-control"
+                    value={formData.source}
+                    onChange={(e) => setFormData({ ...formData, source: e.target.value })}
+                    style={{ flex: 1 }}
+                  >
+                    {sources.map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => setIsAddingSource(!isAddingSource)}
+                    style={{ padding: '8px 12px', minWidth: 'auto' }}
+                  >
+                    <FaPlus />
+                  </button>
+                </div>
+                {isAddingSource && (
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                    <input
+                      type="text"
+                      className="input-control"
+                      placeholder="New source name"
+                      value={newSource}
+                      onChange={(e) => setNewSource(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleAddSource()}
+                      style={{ flex: 1 }}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleAddSource}
+                      style={{ padding: '8px 16px' }}
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      onClick={() => {
+                        setIsAddingSource(false);
+                        setNewSource('');
+                      }}
+                      style={{ padding: '8px 16px' }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="modal-actions">

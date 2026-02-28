@@ -4,18 +4,18 @@ import { format } from 'date-fns';
 import { FaPlus, FaTrash, FaEdit, FaSearch } from 'react-icons/fa';
 import './ExpensesPage.css';
 
-const CATEGORIES = ['Food','Travel','Mobile Recharge','Taxi','Utilities','Movie','Xerox','Pharmacy','Home','Others'];
-
 export default function ExpensesPage() {
-  const { expenses, addExpense, deleteExpense, updateExpense } = useTransactions();
+  const { expenses, addExpense, deleteExpense, updateExpense, categories, addCategory } = useTransactions();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [newCategory, setNewCategory] = useState('');
   const [formData, setFormData] = useState({
     title: '',
     amount: '',
-    category: 'Food',
+    category: categories[0] || 'Food',
     date: format(new Date(), 'yyyy-MM-dd'),
   });
 
@@ -39,11 +39,22 @@ export default function ExpensesPage() {
       setFormData({
         title: '',
         amount: '',
-        category: 'Food',
+        category: categories[0] || 'Food',
         date: format(new Date(), 'yyyy-MM-dd'),
       });
     }
+    setIsAddingCategory(false);
+    setNewCategory('');
     setIsModalOpen(true);
+  };
+
+  const handleAddCategory = async () => {
+    if (newCategory.trim()) {
+      await addCategory(newCategory);
+      setFormData({ ...formData, category: newCategory.trim() });
+      setNewCategory('');
+      setIsAddingCategory(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -182,15 +193,58 @@ export default function ExpensesPage() {
 
               <div className="input-group">
                 <label className="input-label">Category</label>
-                <select
-                  className="input-control"
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                >
-                  {CATEGORIES.map((c) => (
-                    <option key={c}>{c}</option>
-                  ))}
-                </select>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <select
+                    className="input-control"
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    style={{ flex: 1 }}
+                  >
+                    {categories.map((c) => (
+                      <option key={c}>{c}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => setIsAddingCategory(!isAddingCategory)}
+                    style={{ padding: '8px 12px', minWidth: 'auto' }}
+                  >
+                    <FaPlus />
+                  </button>
+                </div>
+                {isAddingCategory && (
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                    <input
+                      type="text"
+                      className="input-control"
+                      placeholder="New category name"
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleAddCategory()}
+                      style={{ flex: 1 }}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleAddCategory}
+                      style={{ padding: '8px 16px' }}
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      onClick={() => {
+                        setIsAddingCategory(false);
+                        setNewCategory('');
+                      }}
+                      style={{ padding: '8px 16px' }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="modal-actions">

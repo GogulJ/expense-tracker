@@ -9,11 +9,16 @@ import {
   doc,
   updateDoc,
   serverTimestamp,
+  setDoc,
+  getDoc,
 } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { useAuth } from './AuthContext';
 
 const TransactionContext = createContext();
+
+const DEFAULT_CATEGORIES = ['Food', 'Travel', 'Mobile Recharge', 'Taxi', 'Utilities', 'Movie', 'Xerox', 'Pharmacy', 'Others'];
+const DEFAULT_SOURCES = ['Salary', 'Dad', 'Investment', 'Other'];
 
 export function useTransactions() {
   return useContext(TransactionContext);
@@ -23,6 +28,8 @@ export function TransactionProvider({ children }) {
   const { currentUser } = useAuth();
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [sources, setSources] = useState(DEFAULT_SOURCES);
   const [loading, setLoading] = useState(true);
 
   // Helper to parse dates
@@ -42,6 +49,8 @@ export function TransactionProvider({ children }) {
     if (!currentUser) {
       setExpenses([]);
       setIncomes([]);
+      setCategories(DEFAULT_CATEGORIES);
+      setSources(DEFAULT_SOURCES);
       setLoading(false);
       return;
     }
@@ -74,16 +83,30 @@ export function TransactionProvider({ children }) {
       setIncomes(data);
     });
 
-    // We can consider loading done once the listeners are attached. 
-    // In a real generic implementation, we might want to wait for the first emission, 
-    // but onSnapshot usually emits immediately if cached or quickly.
-    // For better UX, let's just set loading false after a short timeout or rely on the fact that arrays start empty.
-    // A better way is to track if initial load is done, but for now simple false is fine as listeners are async but fast.
+    // Listen to user preferences for categories and sources
+    const prefsDocRef = doc(db, 'userPreferences', currentUser.uid);
+    const unsubscribePrefs = onSnapshot(prefsDocRef, async (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        setCategories(data.categories || DEFAULT_CATEGORIES);
+        setSources(data.sources || DEFAULT_SOURCES);
+      } else {
+        // Initialize with defaults if document doesn't exist
+        await setDoc(prefsDocRef, {
+          categories: DEFAULT_CATEGORIES,
+          sources: DEFAULT_SOURCES,
+        });
+        setCategories(DEFAULT_CATEGORIES);
+        setSources(DEFAULT_SOURCES);
+      }
+    });
+
     setLoading(false);
 
     return () => {
       unsubscribeExpenses();
       unsubscribeIncomes();
+      unsubscribePrefs();
     };
   }, [currentUser]);
 
@@ -131,9 +154,31 @@ export function TransactionProvider({ children }) {
     await deleteDoc(doc(db, 'incomes', id));
   };
 
+  const addCategory = async (category) => {
+    if (!currentUser || !category.trim()) return;
+    const trimmedCategory = category.trim();
+    if (categories.includes(trimmedCategory)) return; // Already exists
+    
+    const newCategories = [...categories, trimmedCategory];
+    const prefsDocRef = doc(db, 'userPreferences', currentUser.uid);
+    await updateDoc(prefsDocRef, { categories: newCategories });
+  };
+
+  const addSource = async (source) => {
+    if (!currentUser || !source.trim()) return;
+    const trimmedSource = source.trim();
+    if (sources.includes(trimmedSource)) return; // Already exists
+    
+    const newSources = [...sources, trimmedSource];
+    const prefsDocRef = doc(db, 'userPreferences', currentUser.uid);
+    await updateDoc(prefsDocRef, { sources: newSources });
+  };
+
   const value = {
     expenses,
     incomes,
+    categories,
+    sources,
     loading,
     addExpense,
     updateExpense,
@@ -141,6 +186,8 @@ export function TransactionProvider({ children }) {
     addIncome,
     updateIncome,
     deleteIncome,
+    addCategory,
+    addSource,
   };
 
   return (

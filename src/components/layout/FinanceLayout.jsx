@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import AppSwitcher from '../AppSwitcher';
 import Notes from '../Notes';
 import {
   FaWallet,
@@ -10,7 +9,6 @@ import {
   FaSignOutAlt,
   FaBars,
   FaTimes,
-  FaArrowUp,
   FaMoon,
   FaSun,
 } from 'react-icons/fa';
@@ -62,10 +60,6 @@ export default function FinanceLayout({ children }) {
                   💳 Expenses
                 </Link>
 
-                <Link to="/income" className="finance-nav-btn" onClick={() => setIsMenuOpen(false)}>
-                  <FaArrowUp /> Income
-                </Link>
-
                 <button onClick={toggleTheme} className="finance-nav-btn" title="Toggle Theme">
                   {theme === 'dark' ? <FaSun /> : <FaMoon />}
                 </button>
@@ -91,9 +85,6 @@ export default function FinanceLayout({ children }) {
 
       {/* Notes Section */}
       <Notes type="finance" />
-
-      {/* App Switcher */}
-      <AppSwitcher />
     </div>
   );
 }

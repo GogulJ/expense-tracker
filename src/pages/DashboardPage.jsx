@@ -13,14 +13,12 @@ import {
 import { Doughnut, Bar } from 'react-chartjs-2';
 import {
   format,
-  startOfMonth,
-  startOfWeek,
   isSameMonth,
   isSameWeek,
   subMonths,
   subWeeks,
 } from 'date-fns';
-import { FaArrowUp, FaArrowDown, FaWallet, FaPiggyBank } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaWallet } from 'react-icons/fa';
 import './DashboardPage.css';
 
 ChartJS.register(
@@ -34,7 +32,7 @@ ChartJS.register(
 );
 
 export default function DashboardPage() {
-  const { expenses, incomes, loading } = useTransactions();
+  const { expenses, loading } = useTransactions();
 
   /* =========================
      📊 CORE STATS
@@ -49,25 +47,12 @@ export default function DashboardPage() {
       0
     );
 
-    const totalIncome = incomes.reduce(
-      (acc, curr) => acc + (parseFloat(curr.amount) || 0),
-      0
-    );
-
     const thisMonthExpense = expenses
       .filter((e) => isSameMonth(e.date, now))
       .reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
 
-    const thisMonthIncome = incomes
-      .filter((i) => isSameMonth(i.date, now))
-      .reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
-
     const thisWeekExpense = expenses
       .filter((e) => isSameWeek(e.date, now))
-      .reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
-
-    const thisWeekIncome = incomes
-      .filter((i) => isSameWeek(i.date, now))
       .reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
 
     const prevMonthExpense = expenses
@@ -78,20 +63,14 @@ export default function DashboardPage() {
       .filter((e) => isSameWeek(e.date, lastWeek))
       .reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
 
-    const purseAmount = totalIncome - totalExpense;
-
     return { 
       totalExpense, 
-      totalIncome, 
       thisMonthExpense, 
-      thisMonthIncome,
       thisWeekExpense,
-      thisWeekIncome,
       prevMonthExpense, 
       prevWeekExpense,
-      purseAmount
     };
-  }, [expenses, incomes]);
+  }, [expenses]);
 
   /* =========================
      🍩 CATEGORY SPLIT
@@ -257,11 +236,6 @@ export default function DashboardPage() {
       ? ((stats.thisWeekExpense - stats.prevWeekExpense) / stats.prevWeekExpense) * 100
       : 0;
 
-  const savingsPercent = 
-    stats.totalIncome > 0 
-      ? ((stats.purseAmount / stats.totalIncome) * 100).toFixed(1)
-      : 0;
-
   if (loading) return <div className="dashboard-loader">Loading dashboard…</div>;
 
   return (
@@ -291,27 +265,10 @@ export default function DashboardPage() {
         <div className="stat-card highlight">
           <FaWallet />
           <div>
-            <p>Total Income</p>
-            <h2>₹{stats.totalIncome.toLocaleString()}</h2>
+            <p>Total Expenses</p>
+            <h2>₹{stats.totalExpense.toLocaleString()}</h2>
             <span className="meta">Lifetime</span>
           </div>
-        </div>
-
-        <div className="stat-card highlight purse">
-          <FaPiggyBank />
-          <div>
-            <p>Purse Amount</p>
-            <h2>₹{stats.purseAmount.toLocaleString()}</h2>
-            <span className="meta">{savingsPercent}% of income</span>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div>
-            <p>This Month Income</p>
-            <h2>₹{stats.thisMonthIncome.toLocaleString()}</h2>
-          </div>
-          <span className="meta">Monthly earnings</span>
         </div>
 
         <div className="stat-card">
@@ -322,14 +279,6 @@ export default function DashboardPage() {
           <span className={`trend ${stats.thisMonthExpense > stats.prevMonthExpense ? 'up' : 'down'}`}>
             {stats.thisMonthExpense > stats.prevMonthExpense ? <FaArrowUp /> : <FaArrowDown />} vs last month
           </span>
-        </div>
-
-        <div className="stat-card">
-          <div>
-            <p>This Week Income</p>
-            <h2>₹{stats.thisWeekIncome.toLocaleString()}</h2>
-          </div>
-          <span className="meta">Weekly earnings</span>
         </div>
 
         <div className="stat-card">
