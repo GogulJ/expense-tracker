@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { TransactionProvider } from './context/TransactionContext';
-import { NotesProvider } from './context/NotesContext';
 
 // Layouts
 import FinanceLayout from './components/layout/FinanceLayout';
@@ -29,7 +28,6 @@ function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <NotesProvider>
           <TransactionProvider>
             <Routes>
               {/* Public Route */}
@@ -70,7 +68,6 @@ function App() {
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </TransactionProvider>
-        </NotesProvider>
       </ThemeProvider>
     </AuthProvider>
   );
