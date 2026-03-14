@@ -1,9 +1,28 @@
+/* =============================================
+   DASHBOARD HEADER
+============================================= */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 1.5rem;
 }
 
+.dashboard-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.dashboard-header span {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* =============================================
+   STAT CARDS GRID
+============================================= */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -21,7 +40,6 @@
     position: relative;
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.05);
-    /* e5e7eb */
     transition: all 0.3s ease;
     box-shadow: var(--shadow-sm);
     color: var(--text-main);
@@ -37,7 +55,6 @@
     transform: translateY(-2px);
 }
 
-/* Background Circle Decoration */
 .stat-card::before {
     content: '';
     position: absolute;
@@ -55,7 +72,7 @@
 }
 
 .stat-card p {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     margin: 0;
     font-weight: 500;
@@ -71,9 +88,11 @@
 }
 
 .stat-card .meta {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     font-weight: 500;
+    margin-top: 0.2rem;
+    display: block;
 }
 
 .stat-card svg {
@@ -81,6 +100,7 @@
     margin-right: 0.8rem;
     color: var(--color-primary);
     opacity: 0.8;
+    flex-shrink: 0;
 }
 
 /* Highlight Variant */
@@ -93,15 +113,6 @@
 
 .stat-card.highlight:hover {
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
-}
-
-.stat-card.highlight.purse {
-    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
-}
-
-.stat-card.highlight.purse:hover {
-    box-shadow: 0 8px 20px rgba(22, 163, 74, 0.4);
 }
 
 .stat-card.highlight p {
@@ -134,15 +145,13 @@
 }
 
 .trend.up {
-    background: rgba(34, 197, 94, 0.1);
+    background: rgba(34, 197, 94, 0.12);
     color: #16a34a;
-    /* Green */
 }
 
 .trend.down {
-    background: rgba(220, 38, 38, 0.1);
+    background: rgba(220, 38, 38, 0.12);
     color: #dc2626;
-    /* Red */
 }
 
 [data-theme='dark'] .trend.up {
@@ -153,42 +162,6 @@
 [data-theme='dark'] .trend.down {
     background: rgba(220, 38, 38, 0.2);
     color: #f87171;
-}
-
-/* Charts Grid */
-.charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
-}
-
-.chart-card {
-    background: var(--bg-card);
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
-    color: var(--text-main);
-}
-
-.chart-box {
-    height: 280px;
-    position: relative;
-}
-
-.growth-row {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.6rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-[data-theme='dark'] .growth-row {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.growth-row span:first-child {
-    color: var(--text-main);
 }
 
 .up {
@@ -207,6 +180,352 @@
     color: #f87171;
 }
 
+/* =============================================
+   INSIGHT ROW (Health + Budget + Recent)
+============================================= */
+.insight-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 1fr;
+    gap: 1.4rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+    .insight-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .insight-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.insight-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 1.4rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+    color: var(--text-main);
+}
+
+[data-theme='dark'] .insight-card {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.insight-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.insight-card h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Health Card */
+.health-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.health-ring-wrapper {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 0.8rem;
+}
+
+.health-ring {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.health-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.health-note {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Budget Card */
+.budget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.budget-header h3 {
+    margin: 0;
+}
+
+.budget-edit-btn {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366F1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.budget-edit-btn:hover {
+    background: rgba(99, 102, 241, 0.18);
+}
+
+.budget-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.budget-currency {
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.budget-input {
+    flex: 1;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    background: var(--bg-card);
+    color: var(--text-main);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.budget-input:focus {
+    border-color: #6366F1;
+}
+
+.budget-save-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: #6366F1;
+    color: white;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.budget-save-btn:hover {
+    opacity: 0.85;
+}
+
+.budget-amounts {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    color: var(--text-main);
+}
+
+.budget-amounts small {
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-left: 0.2rem;
+}
+
+.budget-bar-bg {
+    width: 100%;
+    height: 10px;
+    border-radius: 99px;
+    background: rgba(128, 128, 128, 0.15);
+    overflow: hidden;
+    margin-bottom: 0.6rem;
+}
+
+.budget-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.8s ease, background 0.4s ease;
+}
+
+.budget-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.budget-ok {
+    color: #22C55E;
+}
+
+.budget-over {
+    color: #EF4444;
+}
+
+.budget-pct {
+    color: var(--text-muted);
+}
+
+.budget-empty {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+/* Recent Transactions Card */
+.recent-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.recent-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+    background: rgba(99, 102, 241, 0.05);
+    transition: background 0.2s ease;
+}
+
+[data-theme='dark'] .recent-item {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.recent-item:hover {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.recent-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.recent-cat {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.recent-note {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.recent-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+}
+
+.recent-amount {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #EF4444;
+}
+
+.recent-date {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* =============================================
+   CHARTS GRID
+============================================= */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.chart-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    color: var(--text-main);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.3s ease;
+}
+
+[data-theme='dark'] .chart-card {
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.chart-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.chart-card h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin: 0 0 1rem 0;
+}
+
+/* Wide chart cards span full grid row */
+.chart-card--wide {
+    grid-column: 1 / -1;
+}
+
+.chart-box {
+    height: 280px;
+    position: relative;
+}
+
+.chart-box--tall {
+    height: 320px;
+}
+
+/* Growth List */
+.growth-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.6rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .growth-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.growth-row span:first-child {
+    color: var(--text-main);
+    font-size: 0.88rem;
+}
+
+/* =============================================
+   ALERTS
+============================================= */
 .alert-card {
     background: #fff7ed;
     border-left: 5px solid #f97316;
@@ -214,6 +533,7 @@
     margin-bottom: 1.2rem;
     border-radius: 12px;
     color: #9a3412;
+    font-size: 0.9rem;
 }
 
 .alert-card.alert-warning {
@@ -222,7 +542,19 @@
     color: #854d0e;
 }
 
-/* Animation */
+[data-theme='dark'] .alert-card {
+    background: rgba(249, 115, 22, 0.1);
+    color: #fb923c;
+}
+
+[data-theme='dark'] .alert-card.alert-warning {
+    background: rgba(234, 179, 8, 0.1);
+    color: #fbbf24;
+}
+
+/* =============================================
+   MISC
+============================================= */
 .fade-in {
     animation: fade 0.4s ease-in;
 }
@@ -252,4 +584,5 @@
     text-align: center;
     margin-top: 2rem;
     color: var(--text-muted);
+    font-size: 0.85rem;
 }
